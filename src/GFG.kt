@@ -1,94 +1,82 @@
-// Java program to demonstrate optimal page
-// replacement algorithm.
-import java.io.*;
-import java.util.*;
-
-class GFG {
-
+internal object GFG {
     // Function to check whether a page exists
     // in a frame or not
-    static boolean search(int key, int[] fr)
-    {
-        for (int i = 0; i < fr.length; i++)
-            if (fr[i] == key)
-                return true;
-        return false;
+    fun search(key: Int, fr: IntArray): Boolean {
+        for (i in fr.indices) if (fr[i] == key) return true
+        return false
     }
 
     // Function to find the frame that will not be used
     // recently in future after given index in pg[0..pn-1]
-    static int predict(int pg[], int[] fr, int pn,
-                       int index)
-    {
+    fun predict(
+        pg: IntArray, fr: IntArray, pn: Int,
+        index: Int
+    ): Int {
         // Store the index of pages which are going
         // to be used recently in future
-        int res = -1, farthest = index;
-        for (int i = 0; i < fr.length; i++) {
-            int j;
-            for (j = index; j < pn; j++) {
+        var res = -1
+        var farthest = index
+        for (i in fr.indices) {
+            var j = index
+            while (j < pn) {
                 if (fr[i] == pg[j]) {
                     if (j > farthest) {
-                        farthest = j;
-                        res = i;
+                        farthest = j
+                        res = i
                     }
-                    break;
+                    break
                 }
+                j++
             }
 
             // If a page is never referenced in future,
             // return it.
-            if (j == pn)
-                return i;
+            if (j == pn) return i
         }
 
         // If all of the frames were not in future,
         // return any of them, we return 0. Otherwise
         // we return res.
-        return (res == -1) ? 0 : res;
+        return if ((res == -1)) 0 else res
     }
 
-    static void optimalPage(int pg[], int pn, int fn)
-    {
+    fun optimalPage(pg: IntArray, pn: Int, fn: Int) {
         // Create an array for given number of
         // frames and initialize it as empty.
-        int[] fr = new int[fn];
+        val fr = IntArray(fn)
 
         // Traverse through page reference array
         // and check for miss and hit.
-        int hit = 0;
-        int index = 0;
-        for (int i = 0; i < pn; i++) {
-
+        var hit = 0
+        var index = 0
+        for (i in 0 until pn) {
             // Page found in a frame : HIT
+
             if (search(pg[i], fr)) {
-                hit++;
-                continue;
+                hit++
+                continue
             }
 
             // Page not found in a frame : MISS
 
             // If there is space available in frames.
-            if (index < fn)
-                fr[index++] = pg[i];
-
-                // Find the page to be replaced.
+            if (index < fn) fr[index++] = pg[i]
             else {
-                int j = predict(pg, fr, pn, i + 1);
-                fr[j] = pg[i];
+                val j = predict(pg, fr, pn, i + 1)
+                fr[j] = pg[i]
             }
         }
-        System.out.println("No. of hits = " + hit);
-        System.out.println("No. of misses = " + (pn - hit));
+        println("No. of hits = $hit")
+        println("No. of misses = " + (pn - hit))
     }
 
     // driver function
-    public static void main(String[] args)
-    {
-
-        int[] pg = { 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2 };
-        int pn = pg.length;
-        int fn = 4;
-        optimalPage(pg, pn, fn);
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val pg = intArrayOf(7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2)
+        val pn = pg.size
+        val fn = 4
+        optimalPage(pg, pn, fn)
     }
 }
 
