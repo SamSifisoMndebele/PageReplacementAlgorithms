@@ -1,12 +1,12 @@
 //Java Program for Bankers Algorithm
 class BankersAlgorithm {
-    var n: Int = 5 // Number of processes
-    var m: Int = 3 // Number of resources
-    var need: Array<IntArray> = Array(n) { IntArray(m) }
-    lateinit var max: Array<IntArray>
-    lateinit var alloc: Array<IntArray>
-    lateinit var avail: IntArray
-    var safeSequence: IntArray = IntArray(n)
+    private var n: Int = 5 // Number of processes
+    private var m: Int = 3 // Number of resources
+    private var need: Array<IntArray> = Array(n) { IntArray(m) }
+    private lateinit var max: Array<IntArray>
+    private lateinit var alloc: Array<IntArray>
+    private lateinit var avail: IntArray
+    private var safeSequence: IntArray = IntArray(n)
 
     fun initializeValues() {
         // P0, P1, P2, P3, P4 are the Process names here
@@ -45,7 +45,7 @@ class BankersAlgorithm {
 
             while (count < n) {
                 var flag = false
-                for (i in 0 until n) {
+                for (i in 0..< n) {
                     if (!visited[i]) {
                         var j: Int
                         j = 0
@@ -75,33 +75,28 @@ class BankersAlgorithm {
             } else {
                 //System.out.println("The given System is Safe");
                 println("Following is the SAFE Sequence")
-                for (i in 0 until n) {
-                    print("Cannot convert element\n" +
-                            "With text: ${safeSequence[i]}")
+                for (i in 0..< n) {
+                    print("P${safeSequence[i]}")
                     if (i != n - 1) print(" -> ")
                 }
             }
         }
 
     fun calculateNeed() {
-        for (i in 0 until n) {
-            for (j in 0 until m) {
+        for (i in 0..<n) {
+            for (j in 0..<m) {
                 need[i][j] = max[i][j] - alloc[i][j]
             }
         }
     }
+}
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val gfg = BankersAlgorithm()
+fun main() {
 
-            gfg.initializeValues()
-            //Calculate the Need Matrix
-            gfg.calculateNeed()
-
-            // Check whether system is in safe state or not
-            gfg.isSafe
-        }
-    }
+    val gfg = BankersAlgorithm()
+    gfg.initializeValues()
+    //Calculate the Need Matrix
+    gfg.calculateNeed()
+    // Check whether system is in safe state or not
+    gfg.isSafe
 }
